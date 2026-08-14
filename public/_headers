@@ -3,8 +3,6 @@
   Content-Type: text/plain; charset=utf-8
 /index.html
   Content-Type: text/plain; charset=utf-8
-/404.html
-  Content-Type: text/plain; charset=utf-8
 
 # The catalog is read cross-origin by the game client's /mods page.
 /index.json

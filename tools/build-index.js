@@ -85,17 +85,23 @@ function infoScreen(title, fields) {
 
 /**
  * Pages serves this for anything it cannot find. Without it a typo'd package URL answers 200 with
- * the welcome screen, and whatever asked for it fails on the parse instead of on the 404.
+ * the welcome screen, and whatever asked for it fails on the parse instead of on the 404. Pages
+ * serves it as HTML whatever _headers says, so the screen goes in a <pre> to survive the trip.
  * @param {string} baseUrl
  * @returns {string}
  */
 function notFound(baseUrl) {
-    return infoScreen("Not Found", [
+    const screen = infoScreen("Not Found", [
         "  There is no such file in this registry.",
         "",
         `  index      : ${baseUrl}/index.json`,
         `  browse     : ${CLIENT_URL}/mods`,
     ]);
+    return `<!doctype html>
+<meta charset="utf-8">
+<title>Not Found</title>
+<pre>${screen}</pre>
+`;
 }
 
 /**
