@@ -130,7 +130,9 @@ function builderFor(source, builderDir) {
 export function buildVersion(manifest, version, outDir, builderDir) {
     const work = mkdtempSync(join(tmpdir(), `spup-${manifest.name}-`));
     try {
-        const source = join(work, "src");
+        // The builder names a package after the directory it builds, and a mod whose path is "."
+        // is built straight from this checkout — so the checkout carries the listing's name.
+        const source = join(work, manifest.name);
         checkout(manifest.repo, version.commit, source);
         if (existsSync(join(source, "package.json"))) {
             // A listed mod's dependencies are not allowed to run code at install time.
