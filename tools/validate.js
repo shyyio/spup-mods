@@ -1,6 +1,5 @@
 // PR validation: every manifest parses, names match their directory, and versions only ever move
-// forward. Who may change a listing is a question for review and (once third parties list mods)
-// CODEOWNERS — not something a field in the file itself can answer.
+// forward.
 //
 //   node tools/validate.js
 

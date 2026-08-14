@@ -1,5 +1,4 @@
-// Generates the published catalog: what the server CLI resolves `mods add <name>` against, and what
-// the game client's /mods page renders. Only versions CI has built and published appear in it.
+// Generates the published catalog
 //
 // This is the site build — Cloudflare Pages runs it and serves `public/`.
 //
@@ -17,7 +16,6 @@ const CLIENT_URL = "https://spupgame.com";
 const SOURCE_URL = "https://github.com/shyyio/spup-mods";
 
 /**
- * The URL a published version's files are served from.
  * @param {string} baseUrl
  * @param {string} name
  * @param {string} version
@@ -62,8 +60,6 @@ export function buildIndex(baseUrl) {
 }
 
 /**
- * The plain-text welcome screen, in the same shape every other service in this project serves (see
- * AbstractHttpServer._infoScreenBanner in the game repo). Static here: Pages has no server.
  * @param {string} title
  * @param {string[]} fields "  label : value" lines
  * @returns {string}
@@ -85,9 +81,6 @@ function infoScreen(title, fields) {
 }
 
 /**
- * Pages serves this for anything it cannot find. Without it a typo'd package URL answers 200 with
- * the welcome screen, and whatever asked for it fails on the parse instead of on the 404. Pages
- * serves it as HTML whatever _headers says, so the screen goes in a <pre> to survive the trip.
  * @param {string} baseUrl
  * @returns {string}
  */

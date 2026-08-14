@@ -1,12 +1,11 @@
 // The registry's per-mod manifest: where a mod's source lives, and one pinned commit per released
-// version. The registry holds no mod source — CI builds every artifact from the pinned commit, so a
-// published bundle always corresponds to public source.
+// version. CI builds every artifact from the pinned commit, so a published bundle always corresponds
+// to public source.
 
 const NAME_PATTERN = /^[a-z][a-z0-9-]{1,31}$/;
 const VERSION_PATTERN = /^\d+\.\d+\.\d+$/;
 const COMMIT_PATTERN = /^[0-9a-f]{40}$/;
 const INTEGRITY_PATTERN = /^sha256-[0-9a-f]{64}$/;
-// Any https git host: nothing here depends on where a mod's source lives.
 const REPO_PATTERN = /^https:\/\/[A-Za-z0-9.-]+(:\d+)?(\/[A-Za-z0-9._-]+)+$/;
 const PATH_SEGMENT_PATTERN = /^[A-Za-z0-9._-]+$/;
 
@@ -15,10 +14,6 @@ const VERSION_KEYS = ["version", "commit", "toolchain", "sdkVersion", "artifacts
 
 const RESERVED_NAMES = new Set(["mods", "mod", "core", "engine", "sdk", "official", "spup", "game"]);
 
-/**
- * One released version: the source commit CI built, the toolchain it used, and the artifact hashes
- * that build produced.
- */
 export class RegistryVersion {
 
     /**
@@ -103,6 +98,7 @@ export class RegistryVersion {
             throw new Error(`${name} ${json.version}: publishedAt must be a string`);
         }
         const publishedAt = json.publishedAt === undefined ? null : json.publishedAt;
+
         return new RegistryVersion({
             version: json.version,
             commit: json.commit,
@@ -119,8 +115,7 @@ export class RegistryManifest {
     /**
      * @param {object} fields
      * @param {string} fields.name
-     * @param {string|null} fields.author display name shown in the catalog; says nothing about
-     *     who may change the listing
+     * @param {string|null} fields.author display name shown in the catalog
      * @param {string} fields.repo source repository URL, on any https git host
      * @param {string} fields.path subdirectory within the repo holding the mod ("." for its root)
      * @param {string} fields.description
@@ -240,9 +235,7 @@ export class RegistryManifest {
 }
 
 /**
- * Whether a path names a directory inside the mod's own checkout. "." is the repo root; anything
- * else is plain segments, and a `..` segment is refused — the publisher joins this onto a checkout,
- * so a path that walks out of it would build something the listing never named.
+ * Whether a path names a directory inside the mod's own checkout.
  * @param {string} path
  * @returns {boolean}
  */
