@@ -84,6 +84,21 @@ function infoScreen(title, fields) {
 }
 
 /**
+ * Pages serves this for anything it cannot find. Without it a typo'd package URL answers 200 with
+ * the welcome screen, and whatever asked for it fails on the parse instead of on the 404.
+ * @param {string} baseUrl
+ * @returns {string}
+ */
+function notFound(baseUrl) {
+    return infoScreen("Not Found", [
+        "  There is no such file in this registry.",
+        "",
+        `  index      : ${baseUrl}/index.json`,
+        `  browse     : ${CLIENT_URL}/mods`,
+    ]);
+}
+
+/**
  * @param {object} index
  * @param {string} baseUrl
  * @returns {string}
@@ -110,5 +125,6 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     mkdirSync(dirname(args.out), {recursive: true});
     writeFileSync(args.out, `${JSON.stringify(index, null, 4)}\n`);
     writeFileSync(join(dirname(args.out), "index.html"), homepage(index, args["base-url"]));
+    writeFileSync(join(dirname(args.out), "404.html"), notFound(args["base-url"]));
     console.log(`${args.out}: ${index.mods.length} mods`);
 }
