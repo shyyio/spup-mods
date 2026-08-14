@@ -1,0 +1,9 @@
+{
+    "name": "pebble-collector",
+    "version": "1.0.0",
+    "sdkVersion": 1,
+    "entry": "mod.js",
+    "parts": [
+        "declaration"
+    ]
+}

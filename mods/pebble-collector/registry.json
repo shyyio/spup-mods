@@ -9,7 +9,12 @@
             "version": "1.0.0",
             "commit": "7b69a05a27333733486a399f1ddeb2ecae97f9b8",
             "toolchain": "1.0.0",
-            "sdkVersion": 1
+            "sdkVersion": 1,
+            "artifacts": {
+                "mod.json": "sha256-15235d08f1bc94d2ca6e5184243673464bda62df4be07f66c6f3fc3207f767e4",
+                "mod.js": "sha256-45b14c29d0245de38f8903c324419c7ab4a5acd72a850862d16587d9e63dfc80"
+            },
+            "publishedAt": "2026-08-14"
         }
     ]
 }
