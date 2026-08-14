@@ -1,0 +1,11 @@
+{
+    "name": "cursor-sync",
+    "version": "1.0.0",
+    "sdkVersion": 1,
+    "entry": "mod.js",
+    "parts": [
+        "declaration",
+        "sim",
+        "client"
+    ]
+}
