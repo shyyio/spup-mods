@@ -1,0 +1,24 @@
+name: validate
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Validate listings
+        run: node tools/validate.js
+
+      - name: The registry's own tests
+        run: npm test
+
+      - name: The site build must succeed
+        run: npm run build

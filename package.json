@@ -1,0 +1,14 @@
+{
+    "name": "spup-mods",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "node tools/build-index.js",
+        "validate": "node tools/validate.js",
+        "test": "node --test tools/*.spec.js"
+    },
+    "engines": {
+        "node": ">=20"
+    }
+}

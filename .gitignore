@@ -1,0 +1,6 @@
+# Built by tools/build-index.js at deploy time (Cloudflare Pages runs `npm run build`).
+public/index.json
+public/index.html
+node_modules/
+.idea/
+MAINTAINING.md

@@ -1,0 +1,16 @@
+# The welcome screen is the same plain-text info screen the game, auth, and reporting servers serve.
+/
+  Content-Type: text/plain; charset=utf-8
+/index.html
+  Content-Type: text/plain; charset=utf-8
+
+# The catalog is read cross-origin by the game client's /mods page.
+/index.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=300
+
+# Published packages are content-pinned by the lockfiles that install them, and a version's files
+# never change once built.
+/p/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000, immutable

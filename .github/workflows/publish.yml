@@ -1,0 +1,72 @@
+name: publish
+
+# On a merged listing change, build every version that has no artifacts yet from its pinned source
+# commit, then commit the built package into public/p/ and record its hashes in the listing. The
+# commit is what deploys: Cloudflare Pages builds this repo and serves public/.
+#
+# Building runs a listed mod's own build, which is untrusted code. That job therefore holds a
+# read-only token and hands its output to a second job, which writes but runs nothing from the mod.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "mods/**/registry.json"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Build every unpublished version
+        run: |
+          set -euo pipefail
+          for manifest in mods/*/registry.json; do
+            name=$(node -e "process.stdout.write(require('./$manifest').name)")
+            versions=$(node -e "
+              const m = require('./$manifest');
+              const pending = m.versions.filter(v => v.artifacts === undefined).map(v => v.version);
+              process.stdout.write(pending.join(' '));
+            ")
+            for version in $versions; do
+              echo "::group::$name $version"
+              node tools/publish.js --mod "$name" --version "$version"
+              echo "::endgroup::"
+            done
+          done
+
+      - name: Hand the packages and updated listings to the commit job
+        uses: actions/upload-artifact@v4
+        with:
+          name: published
+          path: |
+            mods
+            public/p
+          if-no-files-found: error
+
+  commit:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: published
+
+      - name: Commit what was built
+        run: |
+          git config user.name "registry-ci"
+          git config user.email "ci@users.noreply.github.com"
+          git add mods public/p
+          git diff --cached --quiet || git commit -m "publish: build pinned versions"
+          git push
