@@ -3,6 +3,9 @@
 //
 //   node tools/publish.js --mod market --version 1.4.0 [--builder <game repo checkout>]
 //
+// The builder comes from, in order: --builder, the checked-out source itself when it ships one
+// (which is how a first-party mod is built with the very commit it pins), or the pinned
+// @spup/mod-builder toolchain from npm.
 // This runs a listed mod's own build, which is untrusted: install scripts are disabled, and the CI
 // job that calls this holds a read-only token (committing the result is a separate job).
 
@@ -17,6 +20,10 @@ import {RegistryManifest} from "./RegistryManifest.js";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const MANIFEST_FILE = "mod.json";
+// What a checkout must hold for it to build itself.
+const BUILDER_ENTRY = "tools/build-mod.js";
+const BUILDER_LOADER = "src/server/loader.js";
+const CHECKER_ENTRY = "tools/mod-check.js";
 
 /**
  * @param {string} command
@@ -95,11 +102,29 @@ function hashPackage(outDir, manifest, version) {
 }
 
 /**
+ * The builder to build a checkout with: an explicitly given one, or the checkout's own when it
+ * ships the toolchain (the game repo does, and its mods pin it — so they build with exactly the
+ * SDK and builder of the commit they name).
+ * @param {string} source the checked-out source
+ * @param {string|null} builderDir
+ * @returns {string|null} a directory holding tools/build-mod.js, or null to fetch the toolchain
+ */
+function builderFor(source, builderDir) {
+    if (builderDir !== null) {
+        return builderDir;
+    }
+    if (existsSync(join(source, BUILDER_ENTRY))) {
+        return source;
+    }
+    return null;
+}
+
+/**
  * Builds a version and returns its artifact hashes.
  * @param {RegistryManifest} manifest
  * @param {RegistryVersion} version
  * @param {string} outDir where the package is written
- * @param {string|null} builderDir a game-repo checkout providing the builder, or null for npx
+ * @param {string|null} builderDir a checkout providing the builder, or null to resolve one
  * @returns {Map<string, string>}
  */
 export function buildVersion(manifest, version, outDir, builderDir) {
@@ -113,12 +138,13 @@ export function buildVersion(manifest, version, outDir, builderDir) {
         }
         const modDir = manifest.path === "." ? source : join(source, manifest.path);
         const buildArgs = [modDir, outDir, "--version", version.version];
-        if (builderDir === null) {
+        const builder = builderFor(source, builderDir);
+        if (builder === null) {
             run("npx", ["--yes", `@spup/mod-builder@${version.toolchain}`, "build", ...buildArgs], work);
             run("npx", ["--yes", `@spup/mod-builder@${version.toolchain}`, "check", outDir], work);
         } else {
-            run("node", [join(builderDir, "tools/build-mod.js"), ...buildArgs], builderDir);
-            run("node", ["--import", join(builderDir, "src/server/loader.js"), join(builderDir, "tools/mod-check.js"), outDir], builderDir);
+            run("node", [join(builder, BUILDER_ENTRY), ...buildArgs], builder);
+            run("node", ["--import", join(builder, BUILDER_LOADER), join(builder, CHECKER_ENTRY), outDir], builder);
         }
         return hashPackage(outDir, manifest, version);
     } finally {
