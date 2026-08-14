@@ -1,0 +1,15 @@
+{
+    "name": "pebble-collector",
+    "author": "Shy",
+    "repo": "https://github.com/shyyio/spup-mod-template",
+    "path": ".",
+    "description": "The worked example from spup-mod-template: a machine that quietly produces pebbles.",
+    "versions": [
+        {
+            "version": "1.0.0",
+            "commit": "135a463baee1f7b5ca925d4b6a897ae495fc37e6",
+            "toolchain": "1.0.0",
+            "sdkVersion": 1
+        }
+    ]
+}
