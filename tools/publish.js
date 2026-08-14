@@ -135,8 +135,15 @@ export function buildVersion(manifest, version, outDir, builderDir) {
         const source = join(work, manifest.name);
         checkout(manifest.repo, version.commit, source);
         if (existsSync(join(source, "package.json"))) {
-            // A listed mod's dependencies are not allowed to run code at install time.
-            run("npm", ["ci", "--no-audit", "--no-fund", "--ignore-scripts"], source);
+            // A listed mod's dependencies are not allowed to run code at install time. A lockfile
+            // pins them exactly and is what a mod should commit; without one the install resolves
+            // whatever is current, which builds but is not reproducible.
+            const locked = existsSync(join(source, "package-lock.json")) || existsSync(join(source, "npm-shrinkwrap.json"));
+            if (!locked) {
+                console.log("  (no lockfile: dependencies resolve to whatever is current today)");
+            }
+            const install = locked ? "ci" : "install";
+            run("npm", [install, "--no-audit", "--no-fund", "--ignore-scripts"], source);
         }
         const modDir = manifest.path === "." ? source : join(source, manifest.path);
         const buildArgs = [modDir, outDir, "--version", version.version];

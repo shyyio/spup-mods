@@ -7,7 +7,7 @@
     "versions": [
         {
             "version": "1.0.0",
-            "commit": "135a463baee1f7b5ca925d4b6a897ae495fc37e6",
+            "commit": "7b69a05a27333733486a399f1ddeb2ecae97f9b8",
             "toolchain": "1.0.0",
             "sdkVersion": 1
         }
