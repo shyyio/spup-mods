@@ -44,6 +44,14 @@ test("malformed listings are rejected", () => {
     }
 });
 
+test("the optional author is display only", () => {
+    assert.equal(RegistryManifest.parse(listing()).author, null);
+    assert.equal(RegistryManifest.parse(listing({author: "Bob"})).author, "Bob");
+    assert.deepEqual(RegistryManifest.parse(listing({author: "Bob"})).toJSON(), listing({author: "Bob"}));
+    assert.throws(() => RegistryManifest.parse(listing({author: ""})), /author/);
+    assert.throws(() => RegistryManifest.parse(listing({author: "b".repeat(41)})), /author/);
+});
+
 test("source may live on any https git host", () => {
     for (const repo of ["https://gitlab.com/someone/mod", "https://codeberg.org/someone/mod", "https://git.example.com:8443/someone/mod"]) {
         assert.equal(RegistryManifest.parse(listing({repo})).repo, repo);

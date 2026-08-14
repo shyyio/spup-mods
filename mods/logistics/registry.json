@@ -1,5 +1,6 @@
 {
     "name": "logistics",
+    "author": "Shy",
     "repo": "https://github.com/shyyio/game",
     "path": "src/mods/Logistics",
     "description": "Belts, splitters, and underground belts: the base item transport.",

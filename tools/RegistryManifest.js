@@ -10,7 +10,7 @@ const INTEGRITY_PATTERN = /^sha256-[0-9a-f]{64}$/;
 const REPO_PATTERN = /^https:\/\/[A-Za-z0-9.-]+(:\d+)?(\/[A-Za-z0-9._-]+)+$/;
 const PATH_SEGMENT_PATTERN = /^[A-Za-z0-9._-]+$/;
 
-const MANIFEST_KEYS = ["name", "repo", "path", "description", "homepage", "versions"];
+const MANIFEST_KEYS = ["name", "author", "repo", "path", "description", "homepage", "versions"];
 const VERSION_KEYS = ["version", "commit", "toolchain", "sdkVersion", "artifacts", "publishedAt"];
 
 const RESERVED_NAMES = new Set(["mods", "mod", "core", "engine", "sdk", "official", "spup", "game"]);
@@ -119,6 +119,8 @@ export class RegistryManifest {
     /**
      * @param {object} fields
      * @param {string} fields.name
+     * @param {string|null} fields.author display name shown in the catalog; says nothing about
+     *     who may change the listing
      * @param {string} fields.repo source repository URL, on any https git host
      * @param {string} fields.path subdirectory within the repo holding the mod ("." for its root)
      * @param {string} fields.description
@@ -127,12 +129,14 @@ export class RegistryManifest {
      */
     constructor({
             name,
+            author,
             repo,
             path,
             description,
             homepage,
             versions}) {
         this.name = name;
+        this.author = author;
         this.repo = repo;
         this.path = path;
         this.description = description;
@@ -170,10 +174,15 @@ export class RegistryManifest {
     toJSON() {
         const json = {
             name: this.name,
+        };
+        if (this.author !== null) {
+            json.author = this.author;
+        }
+        Object.assign(json, {
             repo: this.repo,
             path: this.path,
             description: this.description,
-        };
+        });
         if (this.homepage !== null) {
             json.homepage = this.homepage;
         }
@@ -192,6 +201,9 @@ export class RegistryManifest {
         }
         if (RESERVED_NAMES.has(json.name)) {
             throw new Error(`"${json.name}" is a reserved name`);
+        }
+        if (json.author !== undefined && (typeof json.author !== "string" || json.author.length === 0 || json.author.length > 40)) {
+            throw new Error(`${json.name}: author must be 1-40 characters`);
         }
         if (typeof json.repo !== "string" || !REPO_PATTERN.test(json.repo)) {
             throw new Error(`${json.name}: repo must be an https git URL`);
@@ -214,8 +226,10 @@ export class RegistryManifest {
         const versions = json.versions.map(entry => RegistryVersion.parse(entry, json.name));
         assertMonotonic(versions, json.name);
         const homepage = json.homepage === undefined ? null : json.homepage;
+        const author = json.author === undefined ? null : json.author;
         return new RegistryManifest({
             name: json.name,
+            author,
             repo: json.repo,
             path: json.path,
             description: json.description,

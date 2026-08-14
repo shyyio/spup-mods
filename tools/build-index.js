@@ -49,6 +49,7 @@ export function buildIndex(baseUrl) {
         }
         mods.push({
             name: manifest.name,
+            author: manifest.author,
             repo: manifest.repo,
             description: manifest.description,
             homepage: manifest.homepage,

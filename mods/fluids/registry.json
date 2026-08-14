@@ -1,5 +1,6 @@
 {
     "name": "fluids",
+    "author": "Shy",
     "repo": "https://github.com/shyyio/game",
     "path": "src/mods/Fluids",
     "description": "Pipes, tanks, and fluid transport.",

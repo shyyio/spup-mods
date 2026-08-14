@@ -12,6 +12,7 @@ Packaged mods are built from source here and served via Pages.
 ```json
 {
     "name": "my-spup-mod", // lowercase letters, digits and dashes, 2-32 characters
+    "author": "Bob", // optional, shown in the catalog
     "repo": "https://github.com/bob/my-spup-mod", // any https git host
     "path": ".", // where the mod lives in that repo
     "description": "One sentence about what the mod adds.",

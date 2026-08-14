@@ -1,5 +1,6 @@
 {
     "name": "base-game",
+    "author": "Shy",
     "repo": "https://github.com/shyyio/game",
     "path": "src/mods/BaseGame",
     "description": "The base game's items, resources, machines, and recipes.",

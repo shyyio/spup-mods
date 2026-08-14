@@ -1,5 +1,6 @@
 {
     "name": "market",
+    "author": "Shy",
     "repo": "https://github.com/shyyio/game",
     "path": "src/mods/Market",
     "description": "Trading terminals: a player-to-player market with NPC price floors.",

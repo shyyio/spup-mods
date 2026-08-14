@@ -1,5 +1,6 @@
 {
     "name": "base-textures",
+    "author": "Shy",
     "repo": "https://github.com/shyyio/game",
     "path": "src/mods/BaseTextures",
     "description": "The base texture atlases every other mod's object types draw from.",

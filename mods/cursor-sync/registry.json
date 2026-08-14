@@ -1,5 +1,6 @@
 {
     "name": "cursor-sync",
+    "author": "Shy",
     "repo": "https://github.com/shyyio/game",
     "path": "src/mods/CursorSync",
     "description": "Shows friends' cursors on the shared map.",
