@@ -15,6 +15,12 @@
                 "mod.js": "sha256-26711620c7034e5c48ffadfe62d1def2ccd9a5c0419e655056a8a5924ee3aef8"
             },
             "publishedAt": "2026-08-14"
+        },
+        {
+            "version": "2.0.0",
+            "commit": "902e604d851d1a8faf90c565bfee7c73c23ed64f",
+            "toolchain": "2.0.0",
+            "sdkVersion": 2
         }
     ]
 }
