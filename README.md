@@ -5,9 +5,7 @@ Catalog of mods for Shy's Power-Up Factory, served at
 
 Packaged mods are built from source here and served via Pages.
 
-## Mod Layout
-
-`registry.json`:
+`my-spup-mod/registry.json`:
 
 ```json
 {
