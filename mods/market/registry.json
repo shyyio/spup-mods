@@ -18,7 +18,7 @@
         },
         {
             "version": "2.0.0",
-            "commit": "902e604d851d1a8faf90c565bfee7c73c23ed64f",
+            "commit": "dfb75bcc17591d3da979f3792d3ba7b8d786b35a",
             "toolchain": "2.0.0",
             "sdkVersion": 2
         }
