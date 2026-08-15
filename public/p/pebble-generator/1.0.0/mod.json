@@ -1,0 +1,11 @@
+{
+    "name": "pebble-generator",
+    "version": "1.0.0",
+    "sdkVersion": 2,
+    "entry": "mod.js",
+    "parts": [
+        "declaration",
+        "sim",
+        "client"
+    ]
+}
