@@ -1,0 +1,10 @@
+{
+    "name": "base-game",
+    "version": "2.10.1",
+    "sdkVersion": 2,
+    "entry": "mod.js",
+    "parts": [
+        "declaration"
+    ],
+    "title": "Base Game"
+}

@@ -31,13 +31,23 @@
             "version": "2.10.0",
             "commit": "bf86e648004155532e4fa8a10d57d9bb6d62dffc",
             "toolchain": "2.0.0",
-            "sdkVersion": 2
+            "sdkVersion": 2,
+            "artifacts": {
+                "mod.json": "sha256-b3f3fb0f539964fa988bbe3e86c9be4b32dcc1935ab236b0c3e5e000d140e32c",
+                "mod.js": "sha256-57601cefd482bd18d83ae0fb407d1eacfff163ef08d092ce9037fd20aac85930"
+            },
+            "publishedAt": "2026-08-26"
         },
         {
             "version": "2.10.1",
             "commit": "160b9f0423f884c5a69eb4e75092a8a6019c0311",
             "toolchain": "2.0.0",
-            "sdkVersion": 2
+            "sdkVersion": 2,
+            "artifacts": {
+                "mod.json": "sha256-1d0a603b04adf12ad6328c2708ba9bfeb4712332ef9625d5bb3740dcf7bfa636",
+                "mod.js": "sha256-57601cefd482bd18d83ae0fb407d1eacfff163ef08d092ce9037fd20aac85930"
+            },
+            "publishedAt": "2026-08-26"
         }
     ]
 }
