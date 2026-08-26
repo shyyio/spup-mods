@@ -6,8 +6,8 @@
     "description": "Placeable notes: sign posts players write on, edit and delete in the world.",
     "versions": [
         {
-            "version": "2.10.0",
-            "commit": "bf86e648004155532e4fa8a10d57d9bb6d62dffc",
+            "version": "2.10.1",
+            "commit": "160b9f0423f884c5a69eb4e75092a8a6019c0311",
             "toolchain": "2.0.0",
             "sdkVersion": 2
         }
