@@ -1,0 +1,11 @@
+{
+    "name": "fluids",
+    "version": "2.10.2",
+    "sdkVersion": 2,
+    "entry": "mod.js",
+    "parts": [
+        "declaration",
+        "client"
+    ],
+    "title": "Fluids"
+}

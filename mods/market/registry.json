@@ -53,7 +53,12 @@
             "version": "2.10.2",
             "commit": "78dc37e56911a15a5321a230f48cc553c385b2a4",
             "toolchain": "2.0.0",
-            "sdkVersion": 2
+            "sdkVersion": 2,
+            "artifacts": {
+                "mod.json": "sha256-601f9428f272b10713c612d030edba293e910adf987bf62a656c1bdc92639dca",
+                "mod.js": "sha256-e74782916c58383f3fc266768799ed8f58bd3464ce36387765219e600f04bfe6"
+            },
+            "publishedAt": "2026-08-26"
         }
     ]
 }
