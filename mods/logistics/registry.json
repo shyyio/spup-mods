@@ -2,7 +2,7 @@
     "name": "logistics",
     "author": "Shy",
     "repo": "https://github.com/shyyio/game",
-    "path": "src/mods/Logistics",
+    "path": "src/mods/logistics",
     "description": "Belts, splitters, and underground belts: the base item transport.",
     "versions": [
         {
@@ -59,12 +59,6 @@
                 "mod.js": "sha256-883e914ef9e1985eca0b536e3feed55ff125721ae105330b59295783e5929897"
             },
             "publishedAt": "2026-08-26"
-        },
-        {
-            "version": "2.10.3",
-            "commit": "0970e960f621fad9f8ede986e91cfe6c59916d40",
-            "toolchain": "2.0.0",
-            "sdkVersion": 2
         }
     ]
 }

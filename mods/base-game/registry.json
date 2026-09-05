@@ -2,7 +2,7 @@
     "name": "base-game",
     "author": "Shy",
     "repo": "https://github.com/shyyio/game",
-    "path": "src/mods/BaseGame",
+    "path": "src/mods/base-game",
     "description": "The base game's items, resources, machines, and recipes.",
     "versions": [
         {
@@ -59,12 +59,6 @@
                 "mod.js": "sha256-f0bff628f13d87acab41cecb934ff6080cbef7ec9d94fcac94c570493b5505c8"
             },
             "publishedAt": "2026-08-26"
-        },
-        {
-            "version": "2.10.3",
-            "commit": "0970e960f621fad9f8ede986e91cfe6c59916d40",
-            "toolchain": "2.0.0",
-            "sdkVersion": 2
         }
     ]
 }

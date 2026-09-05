@@ -4,8 +4,8 @@
 //   node tools/publish.js --mod market --version 1.4.0 [--builder <game repo checkout>]
 //
 // The builder comes from, in order: --builder, the checked-out source itself when it ships one
-// (which is how a first-party mod is built with the very commit it pins), or the pinned
-// @spup/mod-builder toolchain from npm.
+// (which is how a first-party mod is built with the very commit it pins), or a checkout of the game
+// repo at the version the listing pins as its toolchain.
 // This runs a listed mod's own build, which is untrusted: install scripts are disabled, and the CI
 // job that calls this holds a read-only token (committing the result is a separate job).
 
@@ -22,8 +22,12 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const MANIFEST_FILE = "mod.json";
 // What a checkout must hold for it to build itself.
 const BUILDER_ENTRY = "tools/build-mod.js";
-const BUILDER_LOADER = "src/server/loader.js";
+const BUILDER_LOADER = "src/nodeservice/loader.js";
 const CHECKER_ENTRY = "tools/mod-check.js";
+
+// Where the builder comes from for a mod whose own repo does not ship one. A listing's `toolchain`
+// is the game version to build it with, and the game repo tags every release.
+const GAME_REPO = "https://github.com/shyyio/game";
 
 /**
  * @param {string} command
@@ -102,21 +106,45 @@ function hashPackage(outDir, manifest, version) {
 }
 
 /**
- * The builder to build a checkout with: an explicitly given one, or the checkout's own when it
- * ships the toolchain (the game repo does, and its mods pin it — so they build with exactly the
- * SDK and builder of the commit they name).
+ * Installs a checkout's dependencies, which the builder needs and a mod may too. A listed mod's
+ * dependencies are not allowed to run code at install time. A lockfile pins them exactly and is what
+ * a mod should commit; without one the install resolves whatever is current, which builds but is not
+ * reproducible.
+ * @param {string} dir
+ * @returns {void}
+ */
+function installDeps(dir) {
+    if (!existsSync(join(dir, "package.json"))) {
+        return;
+    }
+    const locked = existsSync(join(dir, "package-lock.json")) || existsSync(join(dir, "npm-shrinkwrap.json"));
+    if (!locked) {
+        console.log("  (no lockfile: dependencies resolve to whatever is current today)");
+    }
+    run("npm", [locked ? "ci" : "install", "--no-audit", "--no-fund", "--ignore-scripts"], dir);
+}
+
+/**
+ * The builder to build a checkout with: an explicitly given one, the checkout's own when it ships
+ * the toolchain (the game repo does, and its mods pin it — so they build with exactly the SDK and
+ * builder of the commit they name), or the game repo at the pinned toolchain version.
  * @param {string} source the checked-out source
  * @param {string|null} builderDir
- * @returns {string|null} a directory holding tools/build-mod.js, or null to fetch the toolchain
+ * @param {string} toolchain the game version to build with
+ * @param {string} work a scratch directory to check the builder out into
+ * @returns {string} a directory holding tools/build-mod.js
  */
-function builderFor(source, builderDir) {
+function builderFor(source, builderDir, toolchain, work) {
     if (builderDir !== null) {
         return builderDir;
     }
     if (existsSync(join(source, BUILDER_ENTRY))) {
         return source;
     }
-    return null;
+    const dir = join(work, "builder");
+    checkout(GAME_REPO, `v${toolchain}`, dir);
+    installDeps(dir);
+    return dir;
 }
 
 /**
@@ -134,27 +162,11 @@ export function buildVersion(manifest, version, outDir, builderDir) {
         // is built straight from this checkout — so the checkout carries the listing's name.
         const source = join(work, manifest.name);
         checkout(manifest.repo, version.commit, source);
-        if (existsSync(join(source, "package.json"))) {
-            // A listed mod's dependencies are not allowed to run code at install time. A lockfile
-            // pins them exactly and is what a mod should commit; without one the install resolves
-            // whatever is current, which builds but is not reproducible.
-            const locked = existsSync(join(source, "package-lock.json")) || existsSync(join(source, "npm-shrinkwrap.json"));
-            if (!locked) {
-                console.log("  (no lockfile: dependencies resolve to whatever is current today)");
-            }
-            const install = locked ? "ci" : "install";
-            run("npm", [install, "--no-audit", "--no-fund", "--ignore-scripts"], source);
-        }
+        installDeps(source);
         const modDir = manifest.path === "." ? source : join(source, manifest.path);
-        const buildArgs = [modDir, outDir, "--version", version.version];
-        const builder = builderFor(source, builderDir);
-        if (builder === null) {
-            run("npx", ["--yes", `@spup/mod-builder@${version.toolchain}`, "build", ...buildArgs], work);
-            run("npx", ["--yes", `@spup/mod-builder@${version.toolchain}`, "check", outDir], work);
-        } else {
-            run("node", [join(builder, BUILDER_ENTRY), ...buildArgs], builder);
-            run("node", ["--import", join(builder, BUILDER_LOADER), join(builder, CHECKER_ENTRY), outDir], builder);
-        }
+        const builder = builderFor(source, builderDir, version.toolchain, work);
+        run("node", [join(builder, BUILDER_ENTRY), modDir, outDir, "--version", version.version], builder);
+        run("node", ["--import", join(builder, BUILDER_LOADER), join(builder, CHECKER_ENTRY), outDir], builder);
         return hashPackage(outDir, manifest, version);
     } finally {
         rmSync(work, {recursive: true, force: true});

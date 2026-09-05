@@ -2,7 +2,7 @@
     "name": "notes",
     "author": "Shy",
     "repo": "https://github.com/shyyio/game",
-    "path": "src/mods/Notes",
+    "path": "src/mods/notes",
     "description": "Placeable notes: sign posts players write on, edit and delete in the world.",
     "versions": [
         {
@@ -26,12 +26,6 @@
                 "mod.js": "sha256-6e5a4010aea4fe3ffb742adc061ede234c322ed61a2ac81ce328ffd6954d4f3b"
             },
             "publishedAt": "2026-08-26"
-        },
-        {
-            "version": "2.10.3",
-            "commit": "0970e960f621fad9f8ede986e91cfe6c59916d40",
-            "toolchain": "2.0.0",
-            "sdkVersion": 2
         }
     ]
 }

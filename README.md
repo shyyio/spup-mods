@@ -20,6 +20,9 @@ Packaged mods are built from source here and served via Pages.
 }
 ```
 
+`toolchain` is the game version your mod is built with: CI checks the game repo out at that tag and
+runs its `tools/build-mod.js` over your pinned commit.
+
 ## Listing a mod
 
 1. Fork this repo, add `mods/<name>/registry.json` with your first version's pinned commit.
