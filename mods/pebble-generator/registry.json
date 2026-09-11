@@ -1,9 +1,9 @@
 {
     "name": "pebble-generator",
     "author": "Shy",
-    "repo": "https://github.com/shyyio/spup-mod-template",
-    "path": ".",
-    "description": "The worked example from spup-mod-template: a machine that quietly produces pebbles.",
+    "repo": "https://github.com/shyyio/game",
+    "path": "dev-mods/pebble-generator",
+    "description": "The example mod every mod starts from: a machine that quietly produces pebbles.",
     "versions": [
         {
             "version": "1.0.0",

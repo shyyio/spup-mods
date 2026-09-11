@@ -31,3 +31,16 @@ runs its `tools/build-mod.js` over your pinned commit.
 4. On merge, CI builds the pinned commit and publishes the package.
 
 Releasing a new version is the same flow with one more entry in `versions`.
+
+## The example mod
+
+`pebble-generator` is the example every mod starts from. It lives in the game repo at
+`dev-mods/pebble-generator`, so each game release adds an entry at that release's tag, with the game
+version as both `version` and `toolchain`:
+
+```
+npm run add-release      # in the game checkout; npm run deploy runs it last
+```
+
+It needs this repo checked out beside the game as `spup-mods`: it writes the entry, commits it here
+and pushes, and CI publishes the package.
